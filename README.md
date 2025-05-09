@@ -84,11 +84,12 @@ start index.html  # sur Windows
 
 ## 📈 Captures d'écran
 
+### Mode clair
 <table>
   <tr>
-    <td><img src="./assets/home.png" alt="Page d'accueil" width="250"/></td>
-    <td><img src="./assets/stats.png" alt="Statistiques" width="250"/></td>
-    <td><img src="./assets/settings.png" alt="Paramètres" width="250"/></td>
+    <td><img src="./assets/acceuil-light.png" alt="Accueil - Mode clair" width="250"/></td>
+    <td><img src="./assets/statistique-light.png" alt="Statistiques - Mode clair" width="250"/></td>
+    <td><img src="./assets/parametre-light.png" alt="Paramètres - Mode clair" width="250"/></td>
   </tr>
   <tr>
     <td align="center">Page d'accueil</td>
@@ -97,26 +98,40 @@ start index.html  # sur Windows
   </tr>
 </table>
 
-## Mode sombre
-
+### Mode sombre
 <table>
   <tr>
-    <td><img src="./assets/light-mode.png" alt="Mode clair" width="250"/></td>
-    <td><img src="./assets/dark-mode.png" alt="Mode sombre" width="250"/></td>
+    <td><img src="./assets/acceuil-dark.png" alt="Accueil - Mode sombre" width="250"/></td>
+    <td><img src="./assets/statistique-dark.png" alt="Statistiques - Mode sombre" width="250"/></td>
+    <td><img src="./assets/parametre-dark.png" alt="Paramètres - Mode sombre" width="250"/></td>
   </tr>
   <tr>
-    <td align="center">Mode clair</td>
-    <td align="center">Mode sombre</td>
+    <td align="center">Page d'accueil</td>
+    <td align="center">Statistiques</td>
+    <td align="center">Paramètres</td>
   </tr>
 </table>
 
-## Version mobile
-
+### Version mobile
 <table>
   <tr>
-    <td><img src="./assets/mobile-home.png" alt="Mobile - Accueil" width="200"/></td>
-    <td><img src="./assets/mobile-stats.png" alt="Mobile - Statistiques" width="200"/></td>
-    <td><img src="./assets/mobile-settings.png" alt="Mobile - Paramètres" width="200"/></td>
+    <td><img src="./assets/acceuil-mobile-light.png" alt="Mobile - Accueil" width="200"/></td>
+    <td><img src="./assets/statistique-mobile-light.png" alt="Mobile - Statistiques" width="200"/></td>
+    <td><img src="./assets/parametre-mobile-light.png" alt="Mobile - Paramètres" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center">Accueil</td>
+    <td align="center">Statistiques</td>
+    <td align="center">Paramètres</td>
+  </tr>
+</table>
+
+### Version mobile (Mode sombre)
+<table>
+  <tr>
+    <td><img src="./assets/acceuil-mobile-dark.png" alt="Mobile - Accueil sombre" width="200"/></td>
+    <td><img src="./assets/statistique-mobile-dark.png" alt="Mobile - Statistiques sombre" width="200"/></td>
+    <td><img src="./assets/parametre-mobile-dark.png" alt="Mobile - Paramètres sombre" width="200"/></td>
   </tr>
   <tr>
     <td align="center">Accueil</td>

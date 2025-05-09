@@ -5,11 +5,11 @@
 
 Une application web élégante et intuitive pour suivre vos dépenses quotidiennes. Gardez un œil sur votre budget facilement et prenez le contrôle de vos finances personnelles.
 
-![Aperçu de l'application](./assets/preview.png)
+![Aperçu de l'application](./assets/acceuil-light.png)
 
 ## ✨ Fonctionnalités
 
-![Interface principale](./assets/features.png)
+![Interface principale](./assets/acceuil-light.png)
 
 - **Suivi des dépenses en temps réel** - Ajoutez vos dépenses instantanément
 - **Catégorisation** - Classifiez vos dépenses (Nourriture, Transport, Crédit, etc.)
@@ -41,7 +41,7 @@ start index.html  # sur Windows
 
 ### Ajouter une nouvelle dépense
 
-![Ajouter une dépense](./assets/add-expense.gif)
+![Ajouter une dépense](./assets/ajouter.png)
 
 1. Cliquez sur le bouton flottant "+" dans le coin inférieur droit
 2. Remplissez les détails de votre dépense :
@@ -53,7 +53,7 @@ start index.html  # sur Windows
 
 ### Visualiser vos statistiques
 
-![Page des statistiques](./assets/statistics.png)
+![Page des statistiques](./assets/statistique-light.png)
 
 1. Accédez à l'onglet "Statistiques" via la barre de navigation
 2. Explorez différentes visualisations :
@@ -64,7 +64,7 @@ start index.html  # sur Windows
 
 ### Personnaliser vos paramètres
 
-![Page des paramètres](./assets/settings.png)
+![Page des paramètres](./assets/parametre-light.png)
 
 1. Accédez à l'onglet "Paramètres"
 2. Gérez vos catégories personnalisées

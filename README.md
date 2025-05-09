@@ -5,9 +5,11 @@
 
 Une application web élégante et intuitive pour suivre vos dépenses quotidiennes. Gardez un œil sur votre budget facilement et prenez le contrôle de vos finances personnelles.
 
-![Aperçu de l'application](https://via.placeholder.com/800x400?text=Daily+Expense+Tracker+Preview)
+![Aperçu de l'application](./assets/preview.png)
 
 ## ✨ Fonctionnalités
+
+![Interface principale](./assets/features.png)
 
 - **Suivi des dépenses en temps réel** - Ajoutez vos dépenses instantanément
 - **Catégorisation** - Classifiez vos dépenses (Nourriture, Transport, Crédit, etc.)
@@ -39,6 +41,8 @@ start index.html  # sur Windows
 
 ### Ajouter une nouvelle dépense
 
+![Ajouter une dépense](./assets/add-expense.gif)
+
 1. Cliquez sur le bouton flottant "+" dans le coin inférieur droit
 2. Remplissez les détails de votre dépense :
    - Montant
@@ -49,6 +53,8 @@ start index.html  # sur Windows
 
 ### Visualiser vos statistiques
 
+![Page des statistiques](./assets/statistics.png)
+
 1. Accédez à l'onglet "Statistiques" via la barre de navigation
 2. Explorez différentes visualisations :
    - Répartition par catégorie
@@ -57,6 +63,8 @@ start index.html  # sur Windows
    - Moyenne journalière
 
 ### Personnaliser vos paramètres
+
+![Page des paramètres](./assets/settings.png)
 
 1. Accédez à l'onglet "Paramètres"
 2. Gérez vos catégories personnalisées
@@ -78,12 +86,40 @@ start index.html  # sur Windows
 
 <table>
   <tr>
-    <td><img src="https://via.placeholder.com/250x500?text=Page+Accueil" alt="Page d'accueil" /></td>
-    <td><img src="https://via.placeholder.com/250x500?text=Statistiques" alt="Statistiques" /></td>
-    <td><img src="https://via.placeholder.com/250x500?text=Parametres" alt="Paramètres" /></td>
+    <td><img src="./assets/home.png" alt="Page d'accueil" width="250"/></td>
+    <td><img src="./assets/stats.png" alt="Statistiques" width="250"/></td>
+    <td><img src="./assets/settings.png" alt="Paramètres" width="250"/></td>
   </tr>
   <tr>
     <td align="center">Page d'accueil</td>
+    <td align="center">Statistiques</td>
+    <td align="center">Paramètres</td>
+  </tr>
+</table>
+
+## Mode sombre
+
+<table>
+  <tr>
+    <td><img src="./assets/light-mode.png" alt="Mode clair" width="250"/></td>
+    <td><img src="./assets/dark-mode.png" alt="Mode sombre" width="250"/></td>
+  </tr>
+  <tr>
+    <td align="center">Mode clair</td>
+    <td align="center">Mode sombre</td>
+  </tr>
+</table>
+
+## Version mobile
+
+<table>
+  <tr>
+    <td><img src="./assets/mobile-home.png" alt="Mobile - Accueil" width="200"/></td>
+    <td><img src="./assets/mobile-stats.png" alt="Mobile - Statistiques" width="200"/></td>
+    <td><img src="./assets/mobile-settings.png" alt="Mobile - Paramètres" width="200"/></td>
+  </tr>
+  <tr>
+    <td align="center">Accueil</td>
     <td align="center">Statistiques</td>
     <td align="center">Paramètres</td>
   </tr>
@@ -125,7 +161,7 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 
 ## 👤 Auteur
 
-- Julio - [Développeur d'application](https://github.com/votre-nom)
+- Julio - [Développeur d'application](https://github.com/JulNiten)
 
 ---
 

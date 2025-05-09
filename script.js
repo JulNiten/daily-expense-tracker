@@ -1,192 +1,247 @@
+// Variables globales
+let expenses = [];
+let currentPage = 1;
+const itemsPerPage = 10;
+let filteredExpenses = [];
+
+// Sélection des éléments de l'interface
 const expenseForm = document.getElementById("expense-form");
 const amountInput = document.getElementById("amount");
 const descriptionInput = document.getElementById("description");
 const categoryInput = document.getElementById("category");
 const expenseList = document.getElementById("expense-list");
 const totalAmount = document.getElementById("total-amount");
+const expenseChartElement = document.getElementById("expense-chart");
+const tableBody = document.getElementById("expense-table-body");
+const filterCategory = document.getElementById("filter-category");
+const filterPeriod = document.getElementById("filter-period");
+const filterDate = document.getElementById("filter-date");
+const pageInfo = document.getElementById("page-info");
+const prevPageButton = document.getElementById("prev-page");
+const nextPageButton = document.getElementById("next-page");
 
-// Fonction pour afficher les dépenses
-function renderExpenses() {
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    expenseList.innerHTML = "";
+// Initialisation des graphiques
+let expenseChart;
+let timelineChart;
 
-    let total = 0;
-
-    expenses.forEach(expense => {
-        const li = document.createElement("li");
-        li.innerHTML = expense.amount FCFA - { expense.description }(${ expense.category });
-        expenseList.appendChild(li);
-        total += parseFloat(expense.amount);
+function initCharts() {
+    // Graphique en camembert pour les catégories
+    const pieCtx = document.getElementById('expense-chart').getContext('2d');
+    expenseChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true
+        }
     });
 
-    totalAmount.textContent = total.toFixed(2);
+    // Graphique linéaire pour l'évolution dans le temps
+    const timelineCtx = document.getElementById('timeline-chart').getContext('2d');
+    timelineChart = new Chart(timelineCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Dépenses totales',
+                data: [],
+                borderColor: '#36A2EB',
+                tension: 0.1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Montant (FCFA)'
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Fonction pour ajouter une dépense
-expenseForm.addEventListener("submit", (e) => {
+function addExpense(e) {
     e.preventDefault();
-
     const expense = {
-        amount: amountInput.value,
-        description: descriptionInput.value,
+        id: Date.now(),
+        amount: parseFloat(amountInput.value),
+        description: descriptionInput.value.trim(),
         category: categoryInput.value,
+        date: document.getElementById('expense-date').value || new Date().toISOString().split('T')[0]
     };
 
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    if (!expense.amount || !expense.description) {
+        alert("Veuillez remplir tous les champs !");
+        return;
+    }
+
     expenses.push(expense);
-    localStorage.setItem("expenses", JSON.stringify(expenses));
+    saveExpenses();
+    updateDisplay();
+    e.target.reset();
+}
 
-    amountInput.value = "";
-    descriptionInput.value = "";
-    categoryInput.value = "Nourriture";
+// Fonction pour filtrer les dépenses
+function filterExpenses() {
+    const category = filterCategory.value;
+    const period = filterPeriod.value;
+    const date = filterDate.value;
 
-    renderExpenses();
-});
-renderExpenses();
-// Fonction pour supprimer une dépense
-expenseList.addEventListener("click", (e) => {
-    if (e.target.tagName === "LI") {
-        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-        const index = Array.from(expenseList.children).indexOf(e.target);
-        expenses.splice(index, 1);
-        localStorage.setItem("expenses", JSON.stringify(expenses));
-        renderExpenses();
-    }
-});
+    filteredExpenses = expenses.filter(expense => {
+        const expenseDate = new Date(expense.date);
+        const filterDate = new Date(date);
 
-// Fonction pour filtrer les dépenses par catégorie
-const filterSelect = document.getElementById("filter-category");
-filterSelect.addEventListener("change", (e) => {
-    const selectedCategory = e.target.value;
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        const categoryMatch = !category || expense.category === category;
+        let dateMatch = true;
 
-    expenseList.innerHTML = "";
-
-    let total = 0;
-
-    expenses.forEach(expense => {
-        if (selectedCategory === "all" || expense.category === selectedCategory) {
-            const li = document.createElement("li");
-            li.innerHTML = `${expense.amount} FCFA - ${expense.description} (${expense.category})`;
-            expenseList.appendChild(li);
-            total += parseFloat(expense.amount);
-        }
-    });
-
-    totalAmount.textContent = total.toFixed(2);
-});
-// Fonction pour trier les dépenses par montant
-const sortSelect = document.getElementById("sort-amount");
-sortSelect.addEventListener("change", (e) => {
-    const sortOrder = e.target.value;
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-    if (sortOrder === "asc") {
-        expenses.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount));
-    } else if (sortOrder === "desc") {
-        expenses.sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount));
-    }
-
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-    renderExpenses();
-});
-// Fonction pour afficher des graphiques et statistiques
-const chartButton = document.getElementById("chart-button");
-chartButton.addEventListener("click", () => {
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-    const categories = [...new Set(expenses.map(expense => expense.category))];
-    const data = categories.map(category => {
-        return expenses
-            .filter(expense => expense.category === category)
-            .reduce((total, expense) => total + parseFloat(expense.amount), 0);
-    });
-
-    const ctx = document.getElementById("expense-chart").getContext("2d");
-    new Chart(ctx, {
-        type: "pie",
-        data: {
-            labels: categories,
-            datasets: [{
-                label: "Dépenses par catégorie",
-                data: data,
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-            }],
-        },
-    });
-});
-// Fonction pour exporter les dépenses au format CSV
-const exportButton = document.getElementById("export-button");
-exportButton.addEventListener("click", () => {
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Montant,Description,Catégorie\n";
-
-    expenses.forEach(expense => {
-        csvContent += `${expense.amount},${expense.description},${expense.category}\n`;
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "expenses.csv");
-    document.body.appendChild(link);
-    link.click();
-});
-// Fonction pour importer des dépenses à partir d'un fichier CSV
-const importButton = document.getElementById("import-button");
-importButton.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-        const csvData = event.target.result.split("\n").slice(1);
-        const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-        csvData.forEach(row => {
-            const [amount, description, category] = row.split(",");
-            if (amount && description && category) {
-                expenses.push({ amount, description, category });
+        if (date) {
+            switch (period) {
+                case "day":
+                    dateMatch = expenseDate.toDateString() === filterDate.toDateString();
+                    break;
+                case "month":
+                    dateMatch = expenseDate.getMonth() === filterDate.getMonth() &&
+                        expenseDate.getFullYear() === filterDate.getFullYear();
+                    break;
+                case "year":
+                    dateMatch = expenseDate.getFullYear() === filterDate.getFullYear();
+                    break;
             }
+        }
+
+        return categoryMatch && dateMatch;
+    });
+
+    currentPage = 1;
+    updateDisplay();
+}
+
+// Fonction pour mettre à jour l'affichage
+function updateDisplay() {
+    updateTable();
+    updateCharts();
+    updatePagination();
+}
+
+// Fonction pour mettre à jour le tableau
+function updateTable() {
+    tableBody.innerHTML = "";
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageExpenses = filteredExpenses.slice(start, end);
+
+    pageExpenses.forEach(expense => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td class="p-2">${new Date(expense.date).toLocaleDateString()}</td>
+            <td class="p-2">${expense.description}</td>
+            <td class="p-2">${expense.category}</td>
+            <td class="p-2 text-right">${expense.amount} FCFA</td>
+            <td class="p-2 text-center">
+                <button onclick="deleteExpense(${expense.id})" class="text-red-600">Supprimer</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    updateTotal();
+}
+
+// Fonction pour mettre à jour les graphiques
+function updateCharts() {
+    // Mise à jour du graphique en camembert
+    const categoryTotals = {};
+    filteredExpenses.forEach(expense => {
+        categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
+    });
+
+    expenseChart.data.labels = Object.keys(categoryTotals);
+    expenseChart.data.datasets[0].data = Object.values(categoryTotals);
+    expenseChart.update();
+
+    // Mise à jour du graphique d'évolution
+    const timelineData = {};
+    filteredExpenses
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .forEach(expense => {
+            const date = expense.date;
+            timelineData[date] = (timelineData[date] || 0) + expense.amount;
         });
 
-        localStorage.setItem("expenses", JSON.stringify(expenses));
-        renderExpenses();
-    };
+    timelineChart.data.labels = Object.keys(timelineData);
+    timelineChart.data.datasets[0].data = Object.values(timelineData);
+    timelineChart.update();
+}
 
-    reader.readAsText(file);
-});
-// Fonction pour supprimer toutes les dépenses
-const clearButton = document.getElementById("clear-button");
-clearButton.addEventListener("click", () => {
-    localStorage.removeItem("expenses");
-    renderExpenses();
-});
-// Fonction pour afficher les dépenses par mois
-const monthButton = document.getElementById("month-button");
-monthButton.addEventListener("click", () => {
-    const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+// Fonction pour mettre à jour le total
+function updateTotal() {
+    const total = filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+    totalAmount.textContent = total.toFixed(2);
+}
 
-    const monthlyExpenses = expenses.reduce((acc, expense) => {
-        const month = new Date().getMonth() + 1; // Mois actuel
-        if (!acc[month]) {
-            acc[month] = 0;
-        }
-        acc[month] += parseFloat(expense.amount);
-        return acc;
-    }, {});
+// Fonctions de pagination
+function updatePagination() {
+    const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+    pageInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
 
-    const ctx = document.getElementById("monthly-expenses-chart").getContext("2d");
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: Object.keys(monthlyExpenses),
-            datasets: [{
-                label: "Dépenses mensuelles",
-                data: Object.values(monthlyExpenses),
-                backgroundColor: "#36A2EB",
-            }],
-        },
-    });
-});
+    prevPageButton.disabled = currentPage === 1;
+    nextPageButton.disabled = currentPage === totalPages;
+}
+
+function nextPage() {
+    const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        updateDisplay();
+    }
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        updateDisplay();
+    }
+}
+
+// Fonction pour supprimer une dépense
+function deleteExpense(id) {
+    expenses = expenses.filter(expense => expense.id !== id);
+    saveExpenses();
+    updateDisplay();
+}
+
+// Event Listeners
+expenseForm.addEventListener("submit", addExpense);
+filterCategory.addEventListener("change", filterExpenses);
+filterPeriod.addEventListener("change", filterExpenses);
+filterDate.addEventListener("change", filterExpenses);
+nextPageButton.addEventListener("click", nextPage);
+prevPageButton.addEventListener("click", prevPage);
+
+// Initialisation
+function init() {
+    expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
+    filteredExpenses = [...expenses];
+    initCharts();
+    updateDisplay();
+}
+
+function saveExpenses() {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+}
+
+// Démarrage de l'application
+init();
